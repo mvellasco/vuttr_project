@@ -24,8 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'core',
-    'api',
+    'vuttr.core',
+    'vuttr.api',
 ]
 
 MIDDLEWARE = [

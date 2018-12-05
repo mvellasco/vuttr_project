@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from api.views import tools_view_dispatcher
+from vuttr.api.views import tools_view_dispatcher
+
 urlpatterns = [
     path('tools/', tools_view_dispatcher, name="tools"),
 ]
