@@ -8,6 +8,7 @@ class ModelTools(TestCase):
             link = "https://notion.so",
             description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
         )
+        
     def test_model_exists(self):
         self.assertTrue(Tools.objects.exists())
 

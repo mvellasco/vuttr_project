@@ -35,15 +35,19 @@ class ToolsViewGet(TestCase):
         self.fail("refatore os testes")
 
 class ToolsViewPost(TestCase):
-
-    def test_post(self):
+    def setUp(self):
         data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
             "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
             "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
         }
-        resp = self.client.post('/tools/', data, content_type="application/json")
+        self.resp = self.client.post('/tools/', data, content_type="application/json")
+
+    def test_post(self):
+        self.assertTrue(201, self.resp.status_code)    
+
+    def test_tool_is_created(self):
         self.assertTrue(Tools.objects.exists())
 
 class ToolsViewDelete(TestCase):
@@ -57,7 +61,7 @@ class ToolsViewDelete(TestCase):
         self.resp = self.client.delete(url)
 
     def test_delete(self):
-        self.assertEqual(200, self.resp.status_code)
+        self.assertEqual(204, self.resp.status_code)
 
     def test_objects_is_deleted(self):
         self.assertFalse(Tools.objects.exists())
