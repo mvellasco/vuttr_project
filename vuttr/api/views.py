@@ -1,50 +1,33 @@
-from django.http import JsonResponse
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from vuttr.core.models import Tools
+from .helpers.serializer import serialize
+import json
 
-def tools_view_dispatcher(request):
-    return JsonResponse(
-        [
 
-            {
-                "id": 1,
-                "title": "Notion",
-                "link": "https://notion.so",
-                "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ",
-                "tags": [
-                    "organization",
-                    "planning",
-                    "collaboration",
-                    "writing",
-                    "calendar"
-                ]
-            },
-            {
-                "id": 2,
-                "title": "json-server",
-                "link": "https://github.com/typicode/json-server",
-                "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
-                "tags": [
-                    "api",
-                    "json",
-                    "schema",
-                    "node",
-                    "github",
-                    "rest"
-                ]
-            },
-            {
-                "id": 3,
-                "title": "fastify",
-                "link": "https://www.fastify.io/",
-                "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
-                "tags": [
-                    "web",
-                    "framework",
-                    "node",
-                    "http2",
-                    "https",
-                    "localhost"
-                ]
-            }
-        ],
-        safe=False,
-    )
+@csrf_exempt
+def tools_view_dispatcher(request, id=None):
+    if request.method == "GET":
+        if request.GET.get('tag'):
+            tag = request.GET.get('tag')
+            tools = serialize(Tools.objects.filter(tags__name=tag))
+            return HttpResponse(tools, content_type="application/json")
+        else:
+            tools = serialize(Tools.objects.all())
+            return HttpResponse(tools, content_type="application/json")
+
+    elif request.method == "POST":
+        resp = json.loads(request.body)
+        tool = Tools.objects.create(
+            title = resp['title'],
+            link = resp['link'],
+            description = resp['description'],
+        )
+        for tag in resp['tags']:
+            tool.tags.create(name=tag)
+        return HttpResponse(serialize(tool), content_type="application/json")
+
+    elif request.method == "DELETE":
+        tool = Tools.objects.get(pk=id)
+        tool.delete()
+        return HttpResponse({}, content_type="application/json")

@@ -1,56 +1,63 @@
 from django.test import TestCase
-import json
+from vuttr.core.models import Tools, Tags
+from vuttr.api.helpers.serializer import serialize
+
+
 
 class ToolsViewGet(TestCase):
+    def setUp(self):
+        self.tool = Tools.objects.create(
+            title = "Notion",
+            link = "https://notion.so",
+            description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+        )
+        self.tool.tags.create(name = 'organization')
+        self.tool.tags.create(name = 'planning')
+        self.tool.tags.create(name = 'collaboration')
+        self.tool.tags.create(name = 'writing')
+        self.tool.tags.create(name = 'calendar')
+
+        self.resp = self.client.get('/tools/')
+
     def test_get_status(self):
-        resp = self.client.get('/tools/')
-        self.assertEqual(200, resp.status_code)
+        self.assertEqual(200, self.resp.status_code)
 
     def test_has_correct_response(self):
-        resp = self.client.get('/tools/')
-        data = json.dumps([
+        data = serialize(Tools.objects.all())
+        self.assertContains(self.resp, data)
 
-            {
-                "id": 1,
-                "title": "Notion",
-                "link": "https://notion.so",
-                "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ",
-                "tags": [
-                    "organization",
-                    "planning",
-                    "collaboration",
-                    "writing",
-                    "calendar"
-                ]
-            },
-            {
-                "id": 2,
-                "title": "json-server",
-                "link": "https://github.com/typicode/json-server",
-                "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
-                "tags": [
-                    "api",
-                    "json",
-                    "schema",
-                    "node",
-                    "github",
-                    "rest"
-                ]
-            },
-            {
-                "id": 3,
-                "title": "fastify",
-                "link": "https://www.fastify.io/",
-                "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
-                "tags": [
-                    "web",
-                    "framework",
-                    "node",
-                    "http2",
-                    "https",
-                    "localhost"
-                ]
-            }
-        ])
+    def test_get_tool_by_tag(self):
+        resp = self.client.get("/tools/?tag=writing")
+        tool = serialize(Tools.objects.filter(tags__name="writing"))
+        self.assertContains(resp, tool)
 
-        self.assertContains(resp, data)
+    def test_with_fixtures(self):
+        self.fail("refatore os testes")
+
+class ToolsViewPost(TestCase):
+
+    def test_post(self):
+        data = {
+            "title": "hotel",
+            "link": "https://github.com/typicode/hotel",
+            "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+            "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+        }
+        resp = self.client.post('/tools/', data, content_type="application/json")
+        self.assertTrue(Tools.objects.exists())
+
+class ToolsViewDelete(TestCase):
+    def setUp(self):
+        self.tool = Tools.objects.create(
+            title = "Notion",
+            link = "https://notion.so",
+            description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+        )
+        url = "/tools/{}/".format(self.tool.id)
+        self.resp = self.client.delete(url)
+
+    def test_delete(self):
+        self.assertEqual(200, self.resp.status_code)
+
+    def test_objects_is_deleted(self):
+        self.assertFalse(Tools.objects.exists())
