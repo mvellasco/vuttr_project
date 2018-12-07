@@ -25,9 +25,9 @@ def tools_view_dispatcher(request, id=None):
         )
         for tag in resp['tags']:
             tool.tags.create(name=tag)
-        return HttpResponse(serialize(tool), content_type="application/json")
+        return HttpResponse(serialize(tool), status=201, content_type="application/json")
 
     elif request.method == "DELETE":
         tool = Tools.objects.get(pk=id)
         tool.delete()
-        return HttpResponse({}, content_type="application/json")
+        return HttpResponse(status=204)
