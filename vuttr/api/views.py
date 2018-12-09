@@ -2,11 +2,10 @@ from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
 from vuttr.core.models import Tools
 from .helpers.serializer import serialize
-import json
 
 class ToolView(View):
 
-    def get(self, request, id=None):
+    def get(self, request):
         if request.GET.get('tag'):
             tag = request.GET.get('tag')
             tools = Tools.objects.filter(tags__name=tag)
@@ -19,6 +18,8 @@ class ToolView(View):
             return HttpResponse(serialize(tools), content_type="application/json")
 
     def post(self, request):
+        import json
+
         resp = json.loads(request.body)
         tool = Tools.objects.create(
             title = resp['title'],
