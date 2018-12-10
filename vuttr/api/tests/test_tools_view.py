@@ -34,6 +34,9 @@ class ToolsViewGet(TestCase):
     def test_with_fixtures(self):
         self.fail("refatore os testes")
 
+    def test_improve_code_quality(self):
+        self.fail("refatore o código")
+
 class ToolsViewPost(TestCase):
     def setUp(self):
         data = {
@@ -45,7 +48,7 @@ class ToolsViewPost(TestCase):
         self.resp = self.client.post('/tools/', data, content_type="application/json")
 
     def test_post(self):
-        self.assertTrue(201, self.resp.status_code)    
+        self.assertTrue(201, self.resp.status_code)
 
     def test_tool_is_created(self):
         self.assertTrue(Tools.objects.exists())
