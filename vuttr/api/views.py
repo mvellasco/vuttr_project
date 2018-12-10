@@ -30,6 +30,9 @@ class ToolView(View):
             tool.tags.create(name=tag)
         return HttpResponse(serialize(tool), status=201, content_type="application/json")
 
+    def put(self, request, id):
+        return HttpResponse()
+
     def delete(self, request, id):
         try:
             tool = Tools.objects.get(pk=id)
