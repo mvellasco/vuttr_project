@@ -8,6 +8,3 @@ class TodoList(TestCase):
 
     def test_improve_code_quality(self):
         self.fail("refatore o código")
-
-    def test_configure_postgresql(self):
-        self.fail("configure o banco de dados")

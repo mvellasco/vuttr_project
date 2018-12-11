@@ -4,7 +4,7 @@ from vuttr.tools_api.helpers.serializer import serialize
 
 
 
-class ToolsViewGet(TestCase):
+class ToolsViewValidGet(TestCase):
     def setUp(self):
         self.tool = Tools.objects.create(
             title = "Notion",
@@ -37,7 +37,7 @@ class ToolsViewGet(TestCase):
         resp = self.client.get("/tools/?tag=not_found/")
         self.assertEqual(404, resp.status_code)
 
-class ToolsViewPost(TestCase):
+class ToolsViewValidPost(TestCase):
     def setUp(self):
         data = {
             "title": "hotel",
@@ -53,7 +53,7 @@ class ToolsViewPost(TestCase):
     def test_tool_is_created(self):
         self.assertTrue(Tools.objects.exists())
 
-class ToolsViewDelete(TestCase):
+class ToolsViewValidDelete(TestCase):
     def setUp(self):
         self.tool = Tools.objects.create(
             title = "Notion",
@@ -88,7 +88,7 @@ class ToolsViewValidPut(TestCase):
         self.assertEqual(200, self.resp.status_code)
 
     def test_object_is_updated(self):
-        updated_tool = Tools.objects.get(id=1)
+        updated_tool = Tools.objects.get(id=self.tool.id)
         for key, value in self.data.items():
             with self.subTest():
                 self.assertEqual(value, updated_tool.__getattribute__(key))
