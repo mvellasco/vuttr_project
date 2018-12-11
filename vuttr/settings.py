@@ -11,8 +11,6 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
     'vuttr.core',
     'vuttr.api',
     'django_extensions',
