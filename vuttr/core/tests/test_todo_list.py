@@ -11,6 +11,3 @@ class TodoList(TestCase):
 
     def test_configure_postgresql(self):
         self.fail("configure o banco de dados")
-
-    def test_change_api_app_name(self):
-        self.fail("app name should be tools_api")

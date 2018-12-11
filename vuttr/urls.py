@@ -1,5 +1,5 @@
 from django.urls import path
-from vuttr.api.views import ToolView
+from vuttr.tools_api.views import ToolView
 
 urlpatterns = [
     path('tools/', ToolView.as_view(), name='tools'),

@@ -12,7 +12,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'vuttr.core',
-    'vuttr.api',
+    'vuttr.tools_api',
     'django_extensions',
 ]
 
