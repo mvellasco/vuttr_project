@@ -30,7 +30,7 @@ class ToolView(View):
             tool.tags.create(name=tag)
         return HttpResponse(serialize(tool), status=201, content_type="application/json")
 
-    def put(self, request, id):
+    def patch(self, request, id):
         try:
             tool = Tools.objects.get(pk=id)
             data = json.loads(request.body)

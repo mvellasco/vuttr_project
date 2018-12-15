@@ -69,7 +69,7 @@ class ToolsViewValidDelete(TestCase):
     def test_object_is_deleted(self):
         self.assertFalse(Tools.objects.exists())
 
-class ToolsViewValidPut(TestCase):
+class ToolsViewValidPatch(TestCase):
     def setUp(self):
         self.tool = Tools.objects.create(
             title = "Notion",
@@ -82,9 +82,9 @@ class ToolsViewValidPut(TestCase):
             "link": "https://github.com/typicode/hotel",
             "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box."
         }
-        self.resp = self.client.put(self.url, self.data, content_type="application/json")
+        self.resp = self.client.patch(self.url, self.data, content_type="application/json")
 
-    def test_put(self):
+    def test_patch(self):
         self.assertEqual(200, self.resp.status_code)
 
     def test_object_is_updated(self):
@@ -93,9 +93,9 @@ class ToolsViewValidPut(TestCase):
             with self.subTest():
                 self.assertEqual(value, updated_tool.__getattribute__(key))
 
-class ToolsViewInvalidPut(TestCase):
+class ToolsViewInvalidPatch(TestCase):
     def test_response_404(self):
-        resp = self.client.put('/tools/not_found/')
+        resp = self.client.patch('/tools/not_found/')
         self.assertEqual(404, resp.status_code)
 
     def test_response_400(self):
@@ -106,5 +106,5 @@ class ToolsViewInvalidPut(TestCase):
         )
         url = '/tools/{}/'.format(tool.id)
         data = {}
-        resp = self.client.put(url, data)
+        resp = self.client.patch(url, data)
         self.assertEqual(400, resp.status_code)
