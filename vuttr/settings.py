@@ -9,6 +9,7 @@ DEBUG = config("DEBUG", cast=bool)
 
 ALLOWED_HOSTS = []
 
+APPEND_SLASH = config("APPEND_SLASH", cast=bool, default=False)
 
 INSTALLED_APPS = [
     'vuttr.core',
