@@ -5,15 +5,21 @@ from .helpers.serializer import serialize
 import json
 
 
-class ToolView(View):
+class ToolsView(View):
 
-    def get(self, request):
-        if request.GET.get('tag'):
-            tag = request.GET.get('tag')
+    def get(self, request, id=None):
+        tag = request.GET.get('tag')
+        if tag:
             tools = Tools.objects.filter(tags__name=tag)
             if len(tools) > 0:
                 return HttpResponse(serialize(tools), content_type="application/json")
             else:
+                return HttpResponseNotFound()
+        elif id:
+            try:
+                tool = Tools.objects.get(pk=id)
+                return HttpResponse(serialize(tool), content_type="application/json")
+            except Tools.DoesNotExist:
                 return HttpResponseNotFound()
         else:
             tools = Tools.objects.all()

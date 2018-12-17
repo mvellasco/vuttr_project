@@ -1,7 +1,7 @@
 from django.urls import path
-from vuttr.tools_api.views import ToolView
+from vuttr.tools_api.views import ToolsView
 
 urlpatterns = [
-    path('tools/', ToolView.as_view(), name='tools'),
-    path('tools/<int:id>/', ToolView.as_view(), name='delete_tool')
+    path('tools/', ToolsView.as_view(), name='tools'),
+    path('tools/<int:id>/', ToolsView.as_view(), name='delete_tool')
 ]
