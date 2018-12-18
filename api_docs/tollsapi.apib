@@ -1,0 +1,220 @@
+FORMAT: 1A
+HOST: http://localhost:3000
+
+# Very Useful Tools To Remember
+
+V.U.T.T.R is a simple web service, that allows clients to manage(create, read, update and delete) tools they want to remember and/or study.
+
+# Group Tools
+This is the main resource of the application. It accepts GET, POST, PATCH and DELETE methods.
+
+## Tools [/tools]
+
+### List all tools [GET]
+
++ Response 200 (application/json)
+
+    + Body
+
+        [
+          {
+            "id": 1,
+            "title": "Notion",
+            "link": "https://notion.so",
+            "description": "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized. ",
+            "tags": [
+                "organization",
+                "planning",
+                "collaboration",
+                "writing",
+                "calendar"
+            ]
+          },
+          {
+            "id": 2,
+            "title": "json-server",
+            "link":"https://github.com/typicode/json-server",
+            "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+            "tags": [
+                "api",
+                "json",
+                "schema",
+                "node",
+                "github",
+                "rest"
+            ]
+          },
+          {
+            "id": 3,
+            "title": "fastify",
+            "link": "https://www.fastify.io/",
+            "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+            "tags": [
+                "web",
+                "framework",
+                "node",
+                "http2",
+                "https",
+                "localhost"
+            ]
+          }
+        ]
+
+### Create a new tool [POST]
+
+Creates a new tool. It takes a JSON dictionary with the following content.
+
+  - title - the tool's name.
+  - link - the link to the tool.
+  - description - the description of the tool.
+  - tags (an array of tags[strings]). - the tags to organize the tool.
+
+
++ Request Create new tool (application/json)
+
+    {
+      "title": "hotel",
+      "link": "https://github.com/typicode/hotel",
+      "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+      "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+    }
+
++ Response 201 (application/json)
+
+        + Headers
+
+            Content-Type: application/json
+
+        + Body
+
+            {
+              "id": 4,
+              "title": "hotel",
+              "link": "https://github.com/typicode/hotel",
+              "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+              "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+            }
+
+## Get tool by id [/tool/{tool_id}]
+
+A Tool object has the following attributes.
+
+- id
+- title
+- link
+- description
+- tags (an array of tags[strings]).
+
++ Parameters
+    + tool_id (required, number, `2`) ... ID of the Tool in form of an integer
+
+### View a tool content [GET]
+
++ Request Get Tool with id = 2 (application/json)
+
+    + Headers
+        Accept: application/json
+        Location: /tool/2
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+          "id": 2,
+          "title": "json-server",
+          "link": "https://github.com/typicode/json-server",
+          "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+          "tags": [
+              "api",
+              "json",
+              "schema",
+              "node",
+              "github",
+              "rest"
+          ]
+        }
+
+### Update a tool [PATCH]
+
++ Request Update a Tool with id = 2 (application/json)
+
+    + Headers
+        Accept: application/json
+        Location: /tool/2
+
+    {
+      "title": "other_tool",
+      "link": "https://github.com/typicode/other_tool",
+      "description": "Description of the tool",
+      "tags": [
+          "api",
+          "other_tag",
+          "another_tag"
+      ]
+    }
+
++ Response 200 (application/json)
+
+    + Body
+
+      {
+        "id": 2,
+        "title": "other_tool",
+        "link": "https://github.com/typicode/other_tool",
+        "description": "Description of the tool",
+        "tags": [
+            "api",
+            "other_tag",
+            "another_tag"
+        ]
+      }
+
+
+## Get tools by tag [/tools/{?tag}]
+List tools by tag, and responds with 404 if no tool is found with given tag.
+
++ Parameters
+    + tag (optional, string, `node`) ... Tag to filter tools
+
+
+### Filter tools by tag [GET]
+
++ Request Get tools with tag node(application/json)
+    + Headers
+        Accept: application/json
+        Location: /tools/?tag=node
+
++ Response 200(application/json)
+
+    + Body
+        [
+          {
+            "id": 2,
+            "title": "json-server",
+            "link":"https://github.com/typicode/json-server",
+            "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+            "tags": [
+                "api",
+                "json",
+                "schema",
+                "node",
+                "github",
+                "rest"
+            ]
+          },
+          {
+            "id": 3,
+            "title": "fastify",
+            "link": "https://www.fastify.io/",
+            "description": "Extremely fast and simple, low-overhead web framework for NodeJS. Supports HTTP2.",
+            "tags": [
+                "web",
+                "framework",
+                "node",
+                "http2",
+                "https",
+                "localhost"
+            ]
+          }
+        ]

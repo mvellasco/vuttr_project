@@ -26,15 +26,18 @@ class ToolsView(View):
             return HttpResponse(serialize(tools), content_type="application/json")
 
     def post(self, request):
-        resp = json.loads(request.body)
-        tool = Tools.objects.create(
-            title = resp['title'],
-            link = resp['link'],
-            description = resp['description'],
-        )
-        for tag in resp['tags']:
-            tool.tags.create(name=tag)
-        return HttpResponse(serialize(tool), status=201, content_type="application/json")
+        try:
+            resp = json.loads(request.body)
+            tool = Tools.objects.create(
+                title = resp['title'],
+                link = resp['link'],
+                description = resp['description'],
+            )
+            for tag in resp['tags']:
+                tool.tags.create(name=tag)
+            return HttpResponse(serialize(tool), status=201, content_type="application/json")
+        except json.decoder.JSONDecodeError:
+            return HttpResponse(status=400)
 
     def patch(self, request, id):
         try:
@@ -42,7 +45,7 @@ class ToolsView(View):
             data = json.loads(request.body)
             if data:
                 for key, value in data.items():
-                    tool.__setattr__(key, value)
+                    setattr(tool, key, value)
                 tool.save()
             else:
                 return HttpResponse(status=400)

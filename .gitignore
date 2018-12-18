@@ -3,3 +3,4 @@
 *.sqlite3
 __pycache__/
 .env
+vuttr/core/tests/test_todo_list.py
