@@ -1,6 +1,6 @@
 <h1>Very Useful Tools To Remember</h1>
 
-<h2>This is a simple api made with python, django and postgresql, to manage tools you want to remember or study.</h2>
+<h4>This is a simple api made with python, django and postgresql, to manage tools you want to remember or study.</h4>
 
 Using this project is quite simple, you will need installed on your machine:
   - python-3.6
