@@ -38,6 +38,8 @@ class ToolsView(View):
             return HttpResponse(serialize(tool), status=201, content_type="application/json")
         except json.decoder.JSONDecodeError:
             return HttpResponse(status=400)
+        except KeyError:
+            return HttpResponse(status=400)
 
     def patch(self, request, id):
         try:

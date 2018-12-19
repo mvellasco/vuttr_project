@@ -18,7 +18,7 @@ class ToolViewValidGet(TestCase):
         self.tool.tags.create(name = 'writing')
         self.tool.tags.create(name = 'calendar')
 
-        self.resp = self.client.get('/tools/')
+        self.resp = self.client.get('/tools')
 
     def test_get_status(self):
         self.assertEqual(200, self.resp.status_code)
@@ -29,12 +29,12 @@ class ToolViewValidGet(TestCase):
         self.assertEqual(json.loads(self.resp.content), json.loads(data))
 
     def test_get_tool_by_tag(self):
-        resp = self.client.get("/tools/?tag=writing")
+        resp = self.client.get("/tools?tag=writing")
         tool = serialize(Tools.objects.filter(tags__name="writing"))
         self.assertEqual(json.loads(resp.content), json.loads(tool))
 
     def test_get_tool_by_id(self):
-        resp = self.client.get("/tool/{}/".format(self.tool.id))
+        resp = self.client.get("/tool/{}".format(self.tool.id))
         tool = serialize(Tools.objects.get(id=self.tool.id))
         self.assertEqual(json.loads(resp.content), json.loads(tool))
 
@@ -42,12 +42,12 @@ class ToolViewInvalidGet(TestCase):
 
     def test_response_404_by_tag(self):
         """ Response with 404 if no tool with given tag is found """
-        resp = self.client.get("/tools/?tag=not_found/")
+        resp = self.client.get("/tools?tag=not_found/")
         self.assertEqual(404, resp.status_code)
 
     def test_response_404_by_id(self):
         """ Response with 404 if no tool with given id is found """
-        resp = self.client.get("/tool/{}/".format(2345678))
+        resp = self.client.get("/tool/{}".format(2345678))
         self.assertEqual(404, resp.status_code)
 
 class ToolsViewValidPost(TestCase):
@@ -58,7 +58,7 @@ class ToolsViewValidPost(TestCase):
             "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
             "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
         }
-        self.resp = self.client.post('/tools/', data, content_type="application/json")
+        self.resp = self.client.post('/tools', data, content_type="application/json")
 
     def test_post(self):
         self.assertTrue(201, self.resp.status_code)
@@ -70,6 +70,21 @@ class ToolsViewValidPost(TestCase):
         tool = json.loads(self.resp.content)[0]
         self.assertEqual(Tools.objects.first().id, tool['id'])
 
+class ToolsViewInvalidPost(TestCase):
+    def test_raises_error(self):
+        data = {
+            "title": "hotel",
+            "link": "https://github.com/typicode/hotel",
+            "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+        }
+        resp = self.client.post('/tools', data, content_type="application/json")
+        self.assertRaises(KeyError)
+
+    def test_invalid_post_status_code(self):
+        data = {"title": "hotel"}
+        resp = self.client.post('/tools', data, content_type="application/json")
+        self.assertEqual(400, resp.status_code)
+
 class ToolsViewValidDelete(TestCase):
     def setUp(self):
         self.tool = Tools.objects.create(
@@ -77,7 +92,7 @@ class ToolsViewValidDelete(TestCase):
             link = "https://notion.so",
             description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
         )
-        url = "/tool/{}/".format(self.tool.id)
+        url = "/tool/{}".format(self.tool.id)
         self.resp = self.client.delete(url)
 
     def test_delete(self):
@@ -93,7 +108,7 @@ class ToolsViewValidPatch(TestCase):
             link = "https://notion.so",
             description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
         )
-        self.url = "/tool/{}/".format(self.tool.id)
+        self.url = "/tool/{}".format(self.tool.id)
         self.data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
@@ -108,11 +123,22 @@ class ToolsViewValidPatch(TestCase):
         updated_tool = Tools.objects.get(id=self.tool.id)
         for key, value in self.data.items():
             with self.subTest():
-                self.assertEqual(value, updated_tool.__getattribute__(key))
+                self.assertEqual(value, getattr(updated_tool, key))
+
+    def test_object_is_updated_without_all_fields(self):
+        data = {
+            "title": "hotel",
+            "link": "https://github.com/typicode/hotel",
+        }
+        resp = self.client.patch(self.url, data, content_type="application/json")
+        updated_tool = Tools.objects.get(id=self.tool.id)
+        for key, value in data.items():
+            with self.subTest():
+                self.assertEqual(value, getattr(updated_tool, key))
 
 class ToolsViewInvalidPatch(TestCase):
     def test_response_404(self):
-        resp = self.client.patch('/tool/{}/'.format(2345678))
+        resp = self.client.patch('/tool/{}'.format(2345678))
         self.assertEqual(404, resp.status_code)
 
     def test_response_400(self):
@@ -121,7 +147,7 @@ class ToolsViewInvalidPatch(TestCase):
             link = "https://notion.so",
             description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
         )
-        url = '/tool/{}/'.format(tool.id)
+        url = '/tool/{}'.format(tool.id)
         data = {}
         resp = self.client.patch(url, data)
         self.assertEqual(400, resp.status_code)

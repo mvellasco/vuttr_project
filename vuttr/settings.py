@@ -9,7 +9,7 @@ DEBUG = config("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = []
 
-APPEND_SLASH = config("APPEND_SLASH", cast=bool, default=False)
+APPEND_SLASH = False
 
 INSTALLED_APPS = [
     'vuttr.core',
@@ -20,7 +20,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'vuttr.urls'

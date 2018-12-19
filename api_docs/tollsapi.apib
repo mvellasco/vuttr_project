@@ -91,7 +91,7 @@ Creates a new tool. It takes a JSON dictionary with the following content.
           "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
         }
 
-## Get tools by tag [/tools/{?tag}]
+## Get tools by tag [/tools{?tag}]
 List tools by tag, and responds with 404 if no tool is found with given tag.
 
 + Parameters
@@ -102,7 +102,7 @@ List tools by tag, and responds with 404 if no tool is found with given tag.
 
 + Request Get tools with tag node(application/json)
     + Headers
-        Location: /tools/?tag=node
+        Location: /tools?tag=node
 
 + Response 200(application/json)
 
