@@ -81,95 +81,15 @@ Creates a new tool. It takes a JSON dictionary with the following content.
 
 + Response 201 (application/json)
 
-        + Headers
-
-            Content-Type: application/json
-
-        + Body
-
-            {
-              "id": 4,
-              "title": "hotel",
-              "link": "https://github.com/typicode/hotel",
-              "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
-              "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
-            }
-
-## Get tool by id [/tool/{tool_id}]
-
-A Tool object has the following attributes.
-
-- id
-- title
-- link
-- description
-- tags (an array of tags[strings]).
-
-+ Parameters
-    + tool_id (required, number, `2`) ... ID of the Tool in form of an integer
-
-### View a tool content [GET]
-
-+ Request Get Tool with id = 2 (application/json)
-
-    + Headers
-        Accept: application/json
-        Location: /tool/2
-
-+ Response 200 (application/json)
-
     + Body
 
         {
-          "id": 2,
-          "title": "json-server",
-          "link": "https://github.com/typicode/json-server",
-          "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
-          "tags": [
-              "api",
-              "json",
-              "schema",
-              "node",
-              "github",
-              "rest"
-          ]
+          "id": 4,
+          "title": "hotel",
+          "link": "https://github.com/typicode/hotel",
+          "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+          "tags":["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
         }
-
-### Update a tool [PATCH]
-
-+ Request Update a Tool with id = 2 (application/json)
-
-    + Headers
-        Accept: application/json
-        Location: /tool/2
-
-    {
-      "title": "other_tool",
-      "link": "https://github.com/typicode/other_tool",
-      "description": "Description of the tool",
-      "tags": [
-          "api",
-          "other_tag",
-          "another_tag"
-      ]
-    }
-
-+ Response 200 (application/json)
-
-    + Body
-
-      {
-        "id": 2,
-        "title": "other_tool",
-        "link": "https://github.com/typicode/other_tool",
-        "description": "Description of the tool",
-        "tags": [
-            "api",
-            "other_tag",
-            "another_tag"
-        ]
-      }
-
 
 ## Get tools by tag [/tools/{?tag}]
 List tools by tag, and responds with 404 if no tool is found with given tag.
@@ -182,7 +102,6 @@ List tools by tag, and responds with 404 if no tool is found with given tag.
 
 + Request Get tools with tag node(application/json)
     + Headers
-        Accept: application/json
         Location: /tools/?tag=node
 
 + Response 200(application/json)
@@ -218,3 +137,85 @@ List tools by tag, and responds with 404 if no tool is found with given tag.
             ]
           }
         ]
+
+## Get tool by id [/tool/{tool_id}]
+
+A Tool object has the following attributes.
+
+- id
+- title
+- link
+- description
+- tags (an array of tags[strings]).
+
++ Parameters
+    + tool_id (required, number, `2`) ... ID of the Tool in form of an integer
+
+### View a tool content [GET]
+
++ Request Get Tool with id = 2 (application/json)
+
+    + Headers
+        Location: /tool/2
+
++ Response 200 (application/json)
+
+    + Body
+
+        {
+          "id": 2,
+          "title": "json-server",
+          "link": "https://github.com/typicode/json-server",
+          "description": "Fake REST API based on a json schema. Useful for mocking and creating APIs for front-end devs to consume in coding challenges.",
+          "tags": [
+              "api",
+              "json",
+              "schema",
+              "node",
+              "github",
+              "rest"
+          ]
+        }
+
+### Update a tool [PATCH]
+
++ Request Update a Tool with id = 2 (application/json)
+
+    + Headers
+        Location: /tool/2
+
+    {
+      "title": "other_tool",
+      "link": "https://github.com/typicode/other_tool",
+      "description": "Description of the tool",
+      "tags": [
+          "api",
+          "other_tag",
+          "another_tag"
+      ]
+    }
+
++ Response 200 (application/json)
+
+    + Body
+
+      {
+        "id": 2,
+        "title": "other_tool",
+        "link": "https://github.com/typicode/other_tool",
+        "description": "Description of the tool",
+        "tags": [
+            "api",
+            "other_tag",
+            "another_tag"
+        ]
+      }
+
+### Delete a tool [DELETE]
+
++ Request Delete Tool with id = 2 (application/json)
+
+    + Headers
+        Location: /tool/2
+
++ Response 204 (application/json)
