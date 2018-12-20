@@ -78,7 +78,7 @@ class ToolsViewInvalidPost(TestCase):
         data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
-            "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
+            "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box."
         }
         resp = self.client.post('/tools', data, content_type="application/json")
         self.assertRaises(KeyError)
@@ -130,7 +130,8 @@ class ToolsViewValidPatch(TestCase):
         self.data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
-            "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box."
+            "description": "Local app manager. Start apps within your browser, developer tool with local .localhost domain and https out of the box.",
+            "tags": ["node", "organizing", "webapps", "domain", "developer", "https", "proxy"]
         }
         self.resp = self.client.patch(self.url, self.data, content_type="application/json")
 
@@ -138,8 +139,16 @@ class ToolsViewValidPatch(TestCase):
         """ Should response with 200 for a valid request """
         self.assertEqual(200, self.resp.status_code)
 
-    def test_object_is_updated(self):
+    def test_tags_are_updated(self):
         updated_tool = Tools.objects.get(id=self.tool.id)
+        updated_tags_names = [name[0] for name in updated_tool.tags.values_list('name')]
+        tags_data_names = self.data.get('tags')
+        self.assertEqual(updated_tags_names, tags_data_names)
+
+
+    def test_other_fields_are_updated(self):
+        updated_tool = Tools.objects.get(id=self.tool.id)
+        self.data.pop('tags')
         for key, value in self.data.items():
             with self.subTest():
                 self.assertEqual(value, getattr(updated_tool, key))

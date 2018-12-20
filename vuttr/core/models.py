@@ -2,7 +2,7 @@ from django.db import models
 
 class Tags(models.Model):
     """ Model representing the tags in a tool. """
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         """ Returns the name of the tag as it's string representation. """
