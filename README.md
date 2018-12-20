@@ -11,10 +11,10 @@ Using this project is quite simple, you will need installed on your machine:
 The steps to use the project are the following:
 
 1) Clone the repository.
-2) Access the vuttr folder.(This is the main project folder)
+2) Access the vuttr_project folder.(This is the main project folder)
 3) Create a virtualenv.(e.g. python3 -m venv .venv)
 4) Install the requirements with pip.(e.g. pip install -r requirements.txt)
-5) Create a .env file on the main vuttr folder, and set the following variables:
+5) Create a .env file on the vuttr_project folder, and set the following variables:
     - SECRET_KEY=your-secret-key (You can generate one using: python manage.py generate_secret_key)
     - DEBUG=True or False (Only use False if your planning on running this on production mode, if that's the case remember to set ALLOWED_HOSTS on settings.py)
     - DB_NAME=your-db-name
