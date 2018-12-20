@@ -58,9 +58,12 @@ class ToolsView(View):
         return HttpResponse(serialize(tool))
 
     def delete(self, request, id):
-        try:
-            tool = Tools.objects.get(pk=id)
-            tool.delete()
-            return HttpResponse(status=204)
-        except Tools.DoesNotExist:
-            return HttpResponseNotFound()
+        if not request.body:
+            try:
+                tool = Tools.objects.get(pk=id)
+                tool.delete()
+                return HttpResponse(status=204)
+            except Tools.DoesNotExist:
+                return HttpResponseNotFound()
+        else:
+            return HttpResponse(status=400)

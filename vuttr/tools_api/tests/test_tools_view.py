@@ -20,7 +20,8 @@ class ToolViewValidGet(TestCase):
 
         self.resp = self.client.get('/tools')
 
-    def test_get_status(self):
+    def test_get(self):
+        """ Should response with 200 to a valid request """
         self.assertEqual(200, self.resp.status_code)
 
     def test_response(self):
@@ -61,6 +62,7 @@ class ToolsViewValidPost(TestCase):
         self.resp = self.client.post('/tools', data, content_type="application/json")
 
     def test_post(self):
+        """ Should response with 201 when a new object is created """
         self.assertTrue(201, self.resp.status_code)
 
     def test_tool_is_created(self):
@@ -72,6 +74,7 @@ class ToolsViewValidPost(TestCase):
 
 class ToolsViewInvalidPost(TestCase):
     def test_raises_error(self):
+        """ Should raise KeyError if the body is incomplete """
         data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
@@ -81,6 +84,7 @@ class ToolsViewInvalidPost(TestCase):
         self.assertRaises(KeyError)
 
     def test_invalid_post_status_code(self):
+        """ Should response with 400 to a request with incomplete body """
         data = {"title": "hotel"}
         resp = self.client.post('/tools', data, content_type="application/json")
         self.assertEqual(400, resp.status_code)
@@ -96,10 +100,24 @@ class ToolsViewValidDelete(TestCase):
         self.resp = self.client.delete(url)
 
     def test_delete(self):
+        """ Should response with 204 if the object is deleted """
         self.assertEqual(204, self.resp.status_code)
 
     def test_object_is_deleted(self):
         self.assertFalse(Tools.objects.exists())
+
+class ToolsViewInvalidDelete(TestCase):
+    def test_response_400(self):
+        """ Response with 400 if request has a body """
+        tool = Tools.objects.create(
+            title = "Notion",
+            link = "https://notion.so",
+            description = "All in one tool to organize teams and ideas. Write, plan, collaborate, and get organized.",
+        )
+        url = "/tool/{}".format(tool.id)
+        data = {"title": "Notion"}
+        resp = self.client.delete(url, data, content_type="application/json")
+        self.assertEqual(400, resp.status_code)
 
 class ToolsViewValidPatch(TestCase):
     def setUp(self):
@@ -117,6 +135,7 @@ class ToolsViewValidPatch(TestCase):
         self.resp = self.client.patch(self.url, self.data, content_type="application/json")
 
     def test_patch(self):
+        """ Should response with 200 for a valid request """
         self.assertEqual(200, self.resp.status_code)
 
     def test_object_is_updated(self):
@@ -138,10 +157,12 @@ class ToolsViewValidPatch(TestCase):
 
 class ToolsViewInvalidPatch(TestCase):
     def test_response_404(self):
+        """ Should response with 404 if no tool with given tag is found"""
         resp = self.client.patch('/tool/{}'.format(2345678))
         self.assertEqual(404, resp.status_code)
 
     def test_response_400(self):
+        """ Should response with 400 if the request has an empty body """
         tool = Tools.objects.create(
             title = "Notion",
             link = "https://notion.so",
