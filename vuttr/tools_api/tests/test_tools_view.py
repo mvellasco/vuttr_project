@@ -181,3 +181,11 @@ class ToolsViewInvalidPatch(TestCase):
         data = {}
         resp = self.client.patch(url, data)
         self.assertEqual(400, resp.status_code)
+
+class ToolsViewOptions(TestCase):
+
+    def test_options(self):
+        resp = self.client.options('/tools')
+        resp_headers = [r for r in resp.__getitem__('Allow').lower().split(", ")]
+        allowed_methods = ["get", "post", "patch", "delete", "options"]
+        self.assertEqual(resp_headers, allowed_methods)
