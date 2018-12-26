@@ -9,8 +9,6 @@ class MyCBV():
     def as_view(cls):
         def view(request, *args, **kwargs):
             self = cls()
-            if hasattr(self, 'get') and not hasattr(self, 'head'):
-                self.head = self.get
             self.request = request
             self.args = args
             self.kwargs = kwargs
@@ -26,13 +24,18 @@ class MyCBV():
         return handler(request, *args, **kwargs)
 
     def http_method_not_allowed(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(self._allowed_methods())
+        return HttpResponseNotAllowed(self.allowed_methods())
 
-    def _allowed_methods(self):
+    def allowed_methods(self):
         return [method.upper() for method in self.http_method_names if hasattr(self, method)]
 
     def options(self, request):
         response = HttpResponse()
-        response['Allow'] = ', '.join(self._allowed_methods())
+        response['Allow'] = ', '.join(self.allowed_methods())
+        response['Content-Length'] = '0'
+        return response
+
+    def head(self, request):
+        response = HttpResponse(content_type="application/json")
         response['Content-Length'] = '0'
         return response
