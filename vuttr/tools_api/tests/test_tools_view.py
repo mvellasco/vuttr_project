@@ -1,6 +1,6 @@
 from django.test import TestCase
 from vuttr.core.models import Tools, Tags
-from vuttr.tools_api.helpers.serializer import serialize
+from vuttr.tools_api.utils.serializer import serialize
 import json
 
 
@@ -194,3 +194,9 @@ class ToolsViewOptions(TestCase):
     def test_method_not_allowed(self):
         resp = self.client.put('/tool/1')
         self.assertEqual(405, resp.status_code)
+
+class ToolsViewHead(TestCase):
+
+    def test_head_response_body_empty(self):
+        resp = self.client.head('/tools')
+        self.assertFalse(resp.content)

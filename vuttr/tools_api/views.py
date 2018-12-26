@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
 from vuttr.core.models import Tools, Tags
-from .helpers.serializer import serialize
+from .utils.serializer import serialize
 import json
 
 
