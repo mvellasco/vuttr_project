@@ -187,10 +187,14 @@ class ToolsViewOptions(TestCase):
     def test_options(self):
         """ Should return a response with a header Allow with the allowed methods """
         resp = self.client.options('/tools')
-        resp_headers = [header for header in resp.__getitem__('Allow').lower().split(", ")]
-        allowed_methods = ["get", "post", "patch", "delete", "options"]
+        resp_headers = [header for header in resp.get('Allow').lower().split(", ")]
+        allowed_methods = ["get", "post", "patch", "delete", "head", "options"]
         self.assertEqual(resp_headers, allowed_methods)
 
     def test_method_not_allowed(self):
         resp = self.client.put('/tool/1')
         self.assertEqual(405, resp.status_code)
+
+    def test_head_response_body_empty(self):
+        resp = self.client.head('/tools')
+        self.assertFalse(resp.content)

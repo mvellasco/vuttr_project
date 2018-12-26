@@ -3,12 +3,14 @@ from django.http import HttpResponse, HttpResponseNotAllowed
 
 
 class MyCBV():
-    http_method_names = ['get', 'post', 'patch', 'delete', 'options']
+    http_method_names = ['get', 'post', 'patch', 'delete', 'head', 'options']
 
     @classonlymethod
     def as_view(cls):
         def view(request, *args, **kwargs):
             self = cls()
+            if hasattr(self, 'get') and not hasattr(self, 'head'):
+                self.head = self.get
             self.request = request
             self.args = args
             self.kwargs = kwargs
@@ -27,7 +29,7 @@ class MyCBV():
         return HttpResponseNotAllowed(self._allowed_methods())
 
     def _allowed_methods(self):
-        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
+        return [method.upper() for method in self.http_method_names if hasattr(self, method)]
 
     def options(self, request):
         response = HttpResponse()
