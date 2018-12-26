@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseNotAllowed
 from vuttr.core.models import Tools, Tags
-from .helpers.serializer import serialize
-from .helpers.cbv import MyCBV
+from .utils.serializer import serialize
+from .utils.cbv import MyCBV
 import json
 
 

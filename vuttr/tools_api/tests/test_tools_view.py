@@ -1,6 +1,6 @@
 from django.test import TestCase
 from vuttr.core.models import Tools, Tags
-from vuttr.tools_api.helpers.serializer import serialize
+from vuttr.tools_api.utils.serializer import serialize
 import json
 
 
