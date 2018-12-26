@@ -195,6 +195,8 @@ class ToolsViewOptions(TestCase):
         resp = self.client.put('/tool/1')
         self.assertEqual(405, resp.status_code)
 
+class ToolsViewHead(TestCase):
+
     def test_head_response_body_empty(self):
         resp = self.client.head('/tools')
         self.assertFalse(resp.content)
