@@ -15,7 +15,7 @@ The steps to use the project are the following:
 3) Create a virtualenv.(e.g. python3 -m venv .venv)
 4) Activate your virtual environment with: source .venv/bin/activate
 5) Install the requirements with pip.(e.g. pip install -r requirements.txt)
-6) Create a .env file on the vuttr_project folder, and set the following variables:
+6) Create a .env file on the vuttr_project folder, and set the following variables(one variable per line), and don't use any spaces between your variables, the equal sign, and it's value:
     - SECRET_KEY=your-secret-key (First set it to any value(e.g. abc) and after that create a real one using python manage.py generate_secret_key and replace the old value with the created one.)
     - DEBUG=True or False (Only use False if your planning on running this on production mode, if that's the case remember to set ALLOWED_HOSTS on settings.py)
     - DB_NAME=your-db-name
