@@ -36,6 +36,6 @@ class MyCBV():
         return response
 
     def head(self, request):
-        response = HttpResponse(content_type="application/json")
+        response = HttpResponse()
         response['Content-Length'] = '0'
         return response
