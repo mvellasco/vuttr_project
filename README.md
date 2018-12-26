@@ -25,5 +25,5 @@ The steps to use the project are the following:
     - DB_PORT=your-db-host-port
 7) Run python manage.py migrate to create the database.
 8) Run python manage.py loaddata initial_tools.json to populate the database with some tools.
-9) Run python manage.py test(If everything passes you're good to go! If something fails, check the steps above and see if you perhabs missed something. In case you have any doubts about this steps or if you encounter many errors in the installation process feel free to contact me, my email is miguelvellasco@gmail.com)
+9) Run python manage.py test(If everything passes you're good to go! If something fails, check the steps above and see if you perhabs missed something. In case you have any doubts about these steps or if you encounter many errors in the installation process feel free to contact me, my email is miguelvellasco@gmail.com)
 10) Run python manage.py runserver localhost:3000 to fire-up the development server, so you can see the api in action.
