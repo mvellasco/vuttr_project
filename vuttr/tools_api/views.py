@@ -75,3 +75,8 @@ class ToolsView(View):
                 return HttpResponseNotFound()
         else:
             return HttpResponse(status=400)
+
+    def head(self, request):
+        response = HttpResponse()
+        response['Content-Length'] = '0'
+        return response
