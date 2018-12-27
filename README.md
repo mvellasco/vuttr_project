@@ -3,7 +3,7 @@
 <h4>This is a simple api made with python, django and postgresql, to manage tools you want to remember or study.</h4>
 
 Using this project is quite simple, you will need installed on your machine:
-  - python-3.6(I haven't tested with other versions but I believe it will work any version of python >= 3.4)
+  - python-3.6(I haven't tested with other versions, but I believe it will work with any version of python >= 3.4)
   - postgresql-10(I haven't tested with other versions, but it may work.)
   - postgresql-server-dev-10(I haven't tested with other versions, but it may work.)
   - python3-dev
