@@ -12,13 +12,18 @@ ALLOWED_HOSTS = []
 APPEND_SLASH = False
 
 INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
     'vuttr.core',
     'vuttr.tools_api',
     'django_extensions',
 ]
 
 MIDDLEWARE = [
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'vuttr.urls'

@@ -1,11 +1,14 @@
 from django.http import HttpResponse, HttpResponseNotFound
 from django.views import View
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from vuttr.core.models import Tools, Tags
 from .utils.serializer import serialize
 import json
 
 
-class ToolsView(View):
+
+class ToolsView(LoginRequiredMixin, View):
 
     def get(self, request, id=None):
         tag = request.GET.get('tag')

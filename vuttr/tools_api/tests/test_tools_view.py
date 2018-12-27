@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from vuttr.core.models import Tools, Tags
 from vuttr.tools_api.utils.serializer import serialize
 import json
@@ -7,6 +8,7 @@ import json
 class ToolViewValidGet(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
         self.tool = Tools.objects.create(
             title = "Notion",
             link = "https://notion.so",
@@ -18,6 +20,7 @@ class ToolViewValidGet(TestCase):
         self.tool.tags.create(name = 'writing')
         self.tool.tags.create(name = 'calendar')
 
+        self.client.login(username='mvellasco', password='123456')
         self.resp = self.client.get('/tools')
 
     def test_get(self):
@@ -40,6 +43,9 @@ class ToolViewValidGet(TestCase):
         self.assertEqual(json.loads(resp.content), json.loads(tool))
 
 class ToolViewInvalidGet(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
 
     def test_response_404_by_tag(self):
         """ Response with 404 if no tool with given tag is found """
@@ -53,6 +59,8 @@ class ToolViewInvalidGet(TestCase):
 
 class ToolsViewValidPost(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
         data = {
             "title": "hotel",
             "link": "https://github.com/typicode/hotel",
@@ -73,6 +81,10 @@ class ToolsViewValidPost(TestCase):
         self.assertEqual(Tools.objects.first().id, tool['id'])
 
 class ToolsViewInvalidPost(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
+
     def test_raises_error(self):
         """ Should raise KeyError if the body is incomplete """
         data = {
@@ -91,6 +103,8 @@ class ToolsViewInvalidPost(TestCase):
 
 class ToolsViewValidDelete(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
         self.tool = Tools.objects.create(
             title = "Notion",
             link = "https://notion.so",
@@ -107,6 +121,10 @@ class ToolsViewValidDelete(TestCase):
         self.assertFalse(Tools.objects.exists())
 
 class ToolsViewInvalidDelete(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
+
     def test_response_400(self):
         """ Response with 400 if request has a body """
         tool = Tools.objects.create(
@@ -121,6 +139,8 @@ class ToolsViewInvalidDelete(TestCase):
 
 class ToolsViewValidPatch(TestCase):
     def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
         self.tool = Tools.objects.create(
             title = "Notion",
             link = "https://notion.so",
@@ -165,6 +185,10 @@ class ToolsViewValidPatch(TestCase):
                 self.assertEqual(value, getattr(updated_tool, key))
 
 class ToolsViewInvalidPatch(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
+
     def test_response_404(self):
         """ Should response with 404 if no tool with given tag is found"""
         resp = self.client.patch('/tool/{}'.format(2345678))
@@ -183,6 +207,9 @@ class ToolsViewInvalidPatch(TestCase):
         self.assertEqual(400, resp.status_code)
 
 class ToolsViewOptions(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
 
     def test_options(self):
         """ Should return a response with a header Allow with the allowed methods """
@@ -198,5 +225,7 @@ class ToolsViewOptions(TestCase):
 class ToolsViewHead(TestCase):
 
     def test_head_response_body_empty(self):
+        self.user = User.objects.create_user('mvellasco', 'miguelvellasco@gmail.com', '123456')
+        self.client.login(username='mvellasco', password='123456')
         resp = self.client.head('/tools')
         self.assertFalse(resp.content)
